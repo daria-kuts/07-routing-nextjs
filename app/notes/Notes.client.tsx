@@ -16,9 +16,13 @@ import NoteForm from "../../components/NoteForm/NoteForm";
 
 import css from "./NotesPage.module.css";
 
+interface NotesClientProps {
+  tag?: string;
+}
+
 const PER_PAGE = 12;
 
-export default function NotesClient() {
+export default function NotesClient({ tag }: NotesClientProps) {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
@@ -31,6 +35,7 @@ export default function NotesClient() {
         page,
         perPage: PER_PAGE,
         search: debouncedSearch || undefined,
+        tag,
       }),
     placeholderData: keepPreviousData,
   });
