@@ -1,19 +1,26 @@
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import { fetchNotes } from "../../../../lib/api";
-import { getQueryClient } from "../../../../components/TanStackProvider/getQueryClient";
-import NotesClient from "../../Notes.client";
+import NotesClient from "./Notes.client";
 
 interface Props {
- params: Promise<{
-    tag?: string[];
+  params: Promise<{
+    slug?: string[];
   }>;
 }
 
 export default async function FilteredNotesPage({ params }: Props) {
-  const { tag } = await params;
+  const { slug } = await params;
 
-  const selectedTag: string | undefined =
-    !tag || tag[0] === "all" ? undefined : tag[0];
+  const tagFromUrl = slug?.[0];
 
-  return <NotesClient tag={selectedTag} />;
+  const selectedTag =
+    !tagFromUrl || tagFromUrl === "all"
+      ? undefined
+      : tagFromUrl;
+
+  return (
+    <NotesClient
+      key={selectedTag ?? "all"} 
+      tag={selectedTag}
+    />
+  );
 }
+
