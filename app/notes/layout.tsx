@@ -7,9 +7,9 @@ interface Props {
 
 export default function NotesLayout({ children, modal }: Props) {
   return (
-    <>
+    <main>
       {children}
       {modal}
-    </>
+    </main>
   );
 }

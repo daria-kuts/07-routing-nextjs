@@ -1,19 +1,24 @@
 "use client";
 
-import { type ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 import css from "./Modal.module.css";
 
-interface Props {
+type Props = {
   children: ReactNode;
   onClose: () => void;
-}
+};
 
 export default function Modal({ children, onClose }: Props) {
-  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
+
+
+  const modalRoot =
+    typeof document !== "undefined"
+      ? document.getElementById("modal-root")
+      : null;
 
   useEffect(() => {
-    setModalRoot(document.getElementById("modal-root"));
+    if (!modalRoot) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -26,7 +31,7 @@ export default function Modal({ children, onClose }: Props) {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [onClose, modalRoot]);
 
   if (!modalRoot) return null;
 
@@ -37,7 +42,10 @@ export default function Modal({ children, onClose }: Props) {
       aria-modal="true"
       onClick={onClose}
     >
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={css.modal}
+        onClick={(e) => e.stopPropagation()}
+      >
         {children}
       </div>
     </div>,

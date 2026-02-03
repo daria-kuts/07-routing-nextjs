@@ -22,8 +22,9 @@ export default function RootLayout({
         <TanStackProvider>
           <Header />
           <main>{children}
-            {modal}
+            
           </main>
+          {modal}
           <Footer />
         </TanStackProvider>
 
