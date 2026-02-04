@@ -21,6 +21,11 @@ export default function NotesClient({ tag }: Props) {
   const [debouncedSearch] = useDebounce(search, 400);
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["notes", tag, debouncedSearch, page],
     queryFn: () =>
@@ -38,20 +43,20 @@ export default function NotesClient({ tag }: Props) {
 
   return (
     <>
-      <SearchBox value={search} onChange={setSearch} />
+      <SearchBox value={search} onChange={handleSearchChange} />
 
       <button onClick={() => setIsOpen(true)}>
         Create note
       </button>
 
-     {data?.notes?.length ? (
-  <NoteList notes={data.notes} />
-) : (
-  <p>No notes found</p>
-)}
+      {data?.notes?.length ? (
+        <NoteList notes={data.notes} />
+      ) : (
+        <p>No notes found</p>
+      )}
 
       <Pagination
-         page={page}
+        page={page}
         totalPages={data?.totalPages ?? 1}
         onChange={setPage}
       />
